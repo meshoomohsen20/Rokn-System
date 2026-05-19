@@ -9,8 +9,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   :root{
     --bg:#f8f7f4;--surface:#fff;--surface2:#f1f0ec;
-    --border:#e2e0da;--border2:#ccc9c0;
-    --text:#1a1917;--text2:#6b6860;--text3:#9d9b96;
+    --border:#e2e0da;--text:#1a1917;--text2:#6b6860;--text3:#9d9b96;
     --blue-bg:#e6f1fb;--blue:#185fa5;
     --green-bg:#eaf3de;--green:#3b6d11;
     --red-bg:#fcebeb;--red:#a32d2d;
@@ -24,27 +23,40 @@
   body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
   .container{max-width:1200px;margin:0 auto;padding:1.5rem}
 
+  /* LOGIN */
+  .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+  .login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem 2rem;width:380px;max-width:100%;box-shadow:0 4px 24px rgba(0,0,0,.08)}
+  .login-card h1{font-size:20px;font-weight:700;margin-bottom:4px;text-align:center}
+  .login-card .sub{font-size:13px;color:var(--text2);text-align:center;margin-bottom:2rem}
+  .login-card .fg{margin-bottom:16px}
+  .login-card label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500}
+  .login-card input{width:100%;padding:0 12px;height:42px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-family:'Cairo',sans-serif;background:var(--surface);color:var(--text);outline:none;transition:border .15s}
+  .login-card input:focus{border-color:var(--blue)}
+  .login-btn{width:100%;height:44px;background:var(--text);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:600;font-family:'Cairo',sans-serif;cursor:pointer;margin-top:8px;transition:opacity .15s}
+  .login-btn:hover{opacity:.87}
+  .login-err{background:var(--red-bg);color:var(--red);font-size:12px;padding:8px 12px;border-radius:var(--radius);margin-bottom:14px;display:none;text-align:center;font-weight:500}
+  .login-err.show{display:block}
+
   /* HEADER */
   .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:12px}
-  .header-left h1{font-size:20px;font-weight:700;color:var(--text)}
+  .header-left h1{font-size:20px;font-weight:700}
   .header-left p{font-size:12px;color:var(--text2);margin-top:2px}
   .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-
   .view-link-box{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:6px 12px;font-size:12px;color:var(--text2)}
   .view-link-box .link-text{color:var(--blue);font-weight:600;cursor:pointer;text-decoration:underline}
-  .view-link-box .link-text:hover{opacity:.8}
-
   .btn{display:inline-flex;align-items:center;gap:6px;padding:0 16px;height:36px;border-radius:var(--radius);font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-weight:500;transition:all .15s}
   .btn:hover{background:var(--surface2)}
   .btn-primary{background:var(--text);color:#fff;border-color:var(--text)}
   .btn-primary:hover{opacity:.87;background:var(--text)}
+  .btn-red{background:var(--red-bg);color:var(--red);border-color:var(--red)}
+  .btn-red:hover{opacity:.85}
   .btn svg{width:15px;height:15px;flex-shrink:0}
 
   /* STATS */
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
   .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;box-shadow:var(--shadow)}
   .stat .lbl{font-size:11px;color:var(--text2);margin-bottom:6px;font-weight:500}
-  .stat .val{font-size:28px;font-weight:700;color:var(--text);line-height:1}
+  .stat .val{font-size:28px;font-weight:700;line-height:1}
   .stat .sub{font-size:11px;color:var(--text3);margin-top:4px}
 
   /* TOOLBAR */
@@ -61,25 +73,21 @@
   td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
   tr:last-child td{border-bottom:none}
   tbody tr:hover td{background:#fafaf8}
-
   .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap}
   .b-new{background:var(--blue-bg);color:var(--blue)}
   .b-confirmed{background:var(--green-bg);color:var(--green)}
   .b-cancelled{background:var(--red-bg);color:var(--red)}
   .b-delivered{background:var(--teal-bg);color:var(--teal)}
   .b-pending{background:var(--amber-bg);color:var(--amber)}
-
   .platform{font-size:11px;font-weight:600;display:inline-block;padding:2px 8px;border-radius:var(--radius)}
   .pm{background:var(--purple-bg);color:var(--purple)}
   .pt{background:var(--coral-bg);color:var(--coral)}
   .po{background:var(--surface2);color:var(--text2)}
-
   .actions{display:flex;gap:5px}
   .ibtn{background:none;border:1px solid var(--border);border-radius:var(--radius);width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);transition:all .15s}
   .ibtn:hover{background:var(--surface2);color:var(--text)}
   .ibtn.del:hover{border-color:var(--red);color:var(--red);background:var(--red-bg)}
   .ibtn svg{width:14px;height:14px}
-
   .empty{text-align:center;padding:3rem;color:var(--text3)}
   .id-cell{font-size:11px;color:var(--text3);font-weight:600}
   .date-cell{font-size:12px;color:var(--text2)}
@@ -114,14 +122,33 @@
   @media(max-width:700px){
     .stats{grid-template-columns:repeat(2,1fr)}
     .fg-row{grid-template-columns:1fr}
-    th:nth-child(4),td:nth-child(4),th:nth-child(6),td:nth-child(6),th:nth-child(9),td:nth-child(9){display:none}
   }
 </style>
 </head>
 <body>
 
-<!-- ADMIN PAGE -->
-<div id="adminPage">
+<!-- ===== LOGIN PAGE ===== -->
+<div id="loginPage">
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>📦 نظام الطلبات</h1>
+      <p class="sub">سجل دخولك للمتابعة</p>
+      <div class="login-err" id="loginErr">اسم المستخدم أو كلمة المرور غلط</div>
+      <div class="fg">
+        <label>اسم المستخدم</label>
+        <input type="text" id="lUser" placeholder="admin" autocomplete="username">
+      </div>
+      <div class="fg">
+        <label>كلمة المرور</label>
+        <input type="password" id="lPass" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="login-btn" onclick="doLogin()">دخول</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PAGE ===== -->
+<div id="adminPage" style="display:none">
   <div class="container">
     <div class="header">
       <div class="header-left">
@@ -141,6 +168,10 @@
         <button class="btn btn-primary" onclick="openAdd()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           طلب جديد
+        </button>
+        <button class="btn btn-red" onclick="doLogout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          خروج
         </button>
       </div>
     </div>
@@ -182,6 +213,7 @@
             <th>التاريخ</th>
             <th>الاسم</th>
             <th>رقم الهاتف</th>
+            <th>العنوان</th>
             <th>المنصة</th>
             <th>عدد القطع</th>
             <th>إجمالي الطلب</th>
@@ -196,7 +228,7 @@
   </div>
 </div>
 
-<!-- VIEW ONLY PAGE -->
+<!-- ===== VIEW ONLY PAGE ===== -->
 <div class="view-page" id="viewPage">
   <div class="view-header">
     <div class="view-header-inner">
@@ -204,13 +236,10 @@
         <h1>📦 قائمة الطلبات</h1>
         <p id="viewDate"></p>
       </div>
-      <div style="display:flex;gap:10px;align-items:center">
-        <span class="readonly-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          عرض فقط — لا يمكن التعديل
-        </span>
-        <button class="btn" onclick="goBack()" style="font-size:12px">← للإدارة</button>
-      </div>
+      <span class="readonly-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        عرض فقط — لا يمكن التعديل
+      </span>
     </div>
   </div>
   <div class="container" style="padding-top:0">
@@ -222,6 +251,7 @@
             <th>التاريخ</th>
             <th>الاسم</th>
             <th>رقم الهاتف</th>
+            <th>العنوان</th>
             <th>المنصة</th>
             <th>عدد القطع</th>
             <th>إجمالي الطلب</th>
@@ -235,14 +265,15 @@
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- ===== ORDER MODAL ===== -->
 <div class="overlay" id="modal">
   <div class="modal">
     <h2 id="modalTitle">إضافة طلب جديد</h2>
     <div class="fg-row">
       <div class="fg"><label>الاسم *</label><input type="text" id="fName" placeholder="اسم العميل"></div>
-      <div class="fg"><label>رقم الهاتف *</label><input type="text" id="fPhone" placeholder="01xxxxxxxxx"></div>
+      <div class="fg"><label>رقم الهاتف *</label><input type="text" id="fPhone" placeholder="0912345678"></div>
     </div>
+    <div class="fg"><label>العنوان</label><input type="text" id="fAddress" placeholder="مثال: طرابلس، شارع الرشيد"></div>
     <div class="fg-row">
       <div class="fg"><label>المنصة الإعلانية</label>
         <select id="fPlatform"><option>Meta</option><option>TikTok</option><option>أخرى</option></select>
@@ -251,13 +282,11 @@
     </div>
     <div class="fg-row">
       <div class="fg"><label>عدد القطع</label><input type="number" id="fQty" placeholder="1" min="1"></div>
-      <div class="fg"><label>إجمالي الطلب</label><input type="number" id="fTotal" placeholder="0"></div>
+      <div class="fg"><label>إجمالي الطلب (د.ل)</label><input type="number" id="fTotal" placeholder="0"></div>
     </div>
     <div class="fg-row">
       <div class="fg"><label>الحالة</label>
-        <select id="fStatus">
-          <option>جديد</option><option>مؤكد</option><option>في الانتظار</option><option>تم التوصيل</option><option>ملغي</option>
-        </select>
+        <select id="fStatus"><option>جديد</option><option>مؤكد</option><option>في الانتظار</option><option>تم التوصيل</option><option>ملغي</option></select>
       </div>
       <div class="fg"><label>التاريخ</label><input type="date" id="fDate"></div>
     </div>
@@ -272,14 +301,56 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// ============================================================
+// CREDENTIALS — غير اليوزر والباسورد هنا
+// ============================================================
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'ahmed1010';
+// ============================================================
+
+// ---- AUTH ----
+let isLoggedIn = sessionStorage.getItem('auth') === 'ok';
+
+function doLogin() {
+  const u = document.getElementById('lUser').value.trim();
+  const p = document.getElementById('lPass').value;
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    sessionStorage.setItem('auth', 'ok');
+    isLoggedIn = true;
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('adminPage').style.display = 'block';
+    render();
+    document.getElementById('loginErr').classList.remove('show');
+  } else {
+    document.getElementById('loginErr').classList.add('show');
+    document.getElementById('lPass').value = '';
+    document.getElementById('lPass').focus();
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('auth');
+  isLoggedIn = false;
+  document.getElementById('adminPage').style.display = 'none';
+  document.getElementById('viewPage').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'block';
+  document.getElementById('lUser').value = '';
+  document.getElementById('lPass').value = '';
+}
+
+// Enter key on login
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') doLogin();
+});
+
 // ---- DATA ----
-let orders = JSON.parse(localStorage.getItem('orders_v2') || 'null');
+let orders = JSON.parse(localStorage.getItem('orders_v3') || 'null');
 if (!orders) {
   const today = new Date().toISOString().split('T')[0];
   orders = [
-    {id:'ORD-001',date:today,name:'محمد علي',phone:'01012345678',platform:'Meta',source:'إعلان فيديو',qty:2,total:350,status:'جديد',notes:''},
-    {id:'ORD-002',date:today,name:'سارة أحمد',phone:'01098765432',platform:'TikTok',source:'إعلان صورة',qty:1,total:180,status:'مؤكد',notes:'تسليم سريع'},
-    {id:'ORD-003',date:today,name:'خالد محمود',phone:'01123456789',platform:'Meta',source:'ريتارجيت',qty:3,total:520,status:'تم التوصيل',notes:''},
+    {id:'ORD-001',date:today,name:'محمد علي',phone:'0912345678',address:'طرابلس، شارع الرشيد',platform:'Meta',source:'إعلان فيديو',qty:2,total:350,status:'جديد',notes:''},
+    {id:'ORD-002',date:today,name:'سارة أحمد',phone:'0923456789',address:'بنغازي، الكيش',platform:'TikTok',source:'إعلان صورة',qty:1,total:180,status:'مؤكد',notes:'تسليم سريع'},
+    {id:'ORD-003',date:today,name:'خالد محمود',phone:'0934567890',address:'مصراتة',platform:'Meta',source:'ريتارجيت',qty:3,total:520,status:'تم التوصيل',notes:''},
   ];
   save();
 }
@@ -287,11 +358,11 @@ if (!orders) {
 let editId = null;
 let orderCounter = orders.length + 1;
 
-function save() { localStorage.setItem('orders_v2', JSON.stringify(orders)); }
+function save() { localStorage.setItem('orders_v3', JSON.stringify(orders)); }
 
 // ---- HELPERS ----
 function getBadge(s) {
-  return {جديد:'b-new',مؤكد:'b-confirmed','في الانتظار':'b-pending','تم التوصيل':'b-delivered',ملغي:'b-cancelled'}[s] || 'b-new';
+  return {جديد:'b-new',مؤكد:'b-confirmed','في الانتظار':'b-pending','تم التوصيل':'b-delivered',ملغي:'b-cancelled'}[s]||'b-new';
 }
 function getPlatClass(p) { return p==='Meta'?'pm':p==='TikTok'?'pt':'po'; }
 
@@ -309,25 +380,23 @@ function render() {
   const q = document.getElementById('search').value.toLowerCase();
   const fs = document.getElementById('filterStatus').value;
   const fp = document.getElementById('filterPlatform').value;
-  const filtered = orders.filter(o => {
-    return (!q || o.name.toLowerCase().includes(q) || o.id.toLowerCase().includes(q) || o.phone.includes(q))
-      && (!fs || o.status === fs)
-      && (!fp || o.platform === fp);
-  });
+  const filtered = orders.filter(o =>
+    (!q || o.name.toLowerCase().includes(q) || o.id.toLowerCase().includes(q) || o.phone.includes(q))
+    && (!fs || o.status === fs)
+    && (!fp || o.platform === fp)
+  );
   const tbody = document.getElementById('tbody');
-  if (!filtered.length) {
-    tbody.innerHTML = '<tr><td colspan="10" class="empty">لا توجد طلبات مطابقة</td></tr>';
-    return;
-  }
+  if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="11" class="empty">لا توجد طلبات مطابقة</td></tr>'; return; }
   tbody.innerHTML = filtered.map(o => `
     <tr>
       <td class="id-cell">${o.id}</td>
       <td class="date-cell">${o.date}</td>
       <td style="font-weight:600">${o.name}</td>
-      <td style="direction:ltr;text-align:right;font-size:12px;color:#6b6860">${o.phone}</td>
+      <td style="direction:ltr;text-align:right;font-size:12px;color:var(--text2)">${o.phone}</td>
+      <td style="font-size:12px;color:var(--text2);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.address||'—'}</td>
       <td><span class="platform ${getPlatClass(o.platform)}">${o.platform}</span></td>
       <td style="text-align:center;font-weight:600">${o.qty}</td>
-      <td style="font-weight:600">${Number(o.total).toLocaleString('ar-EG')} ج.م</td>
+      <td style="font-weight:600">${Number(o.total).toLocaleString('ar-LY')} د.ل</td>
       <td><span class="badge ${getBadge(o.status)}">${o.status}</span></td>
       <td class="notes-cell" title="${o.notes||''}">${o.notes||'—'}</td>
       <td>
@@ -346,18 +415,19 @@ function render() {
 
 // ---- RENDER VIEW TABLE ----
 function renderView() {
-  document.getElementById('viewDate').textContent = 'آخر تحديث: ' + new Date().toLocaleString('ar-EG');
+  document.getElementById('viewDate').textContent = 'آخر تحديث: ' + new Date().toLocaleString('ar-LY');
   const tbody = document.getElementById('viewTbody');
-  if (!orders.length) { tbody.innerHTML = '<tr><td colspan="9" class="empty">لا توجد طلبات</td></tr>'; return; }
+  if (!orders.length) { tbody.innerHTML = '<tr><td colspan="10" class="empty">لا توجد طلبات</td></tr>'; return; }
   tbody.innerHTML = orders.map(o => `
     <tr>
       <td class="id-cell">${o.id}</td>
       <td class="date-cell">${o.date}</td>
       <td style="font-weight:600">${o.name}</td>
-      <td style="direction:ltr;text-align:right;font-size:12px;color:#6b6860">${o.phone}</td>
+      <td style="direction:ltr;text-align:right;font-size:12px;color:var(--text2)">${o.phone}</td>
+      <td style="font-size:12px;color:var(--text2);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.address||'—'}</td>
       <td><span class="platform ${getPlatClass(o.platform)}">${o.platform}</span></td>
       <td style="text-align:center;font-weight:600">${o.qty}</td>
-      <td style="font-weight:600">${Number(o.total).toLocaleString('ar-EG')} ج.م</td>
+      <td style="font-weight:600">${Number(o.total).toLocaleString('ar-LY')} د.ل</td>
       <td><span class="badge ${getBadge(o.status)}">${o.status}</span></td>
       <td class="notes-cell">${o.notes||'—'}</td>
     </tr>
@@ -368,15 +438,12 @@ function renderView() {
 function openAdd() {
   editId = null;
   document.getElementById('modalTitle').textContent = 'إضافة طلب جديد';
-  document.getElementById('fName').value = '';
-  document.getElementById('fPhone').value = '';
+  ['fName','fPhone','fAddress','fSource','fNotes'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('fPlatform').value = 'Meta';
-  document.getElementById('fSource').value = '';
   document.getElementById('fQty').value = '1';
   document.getElementById('fTotal').value = '';
   document.getElementById('fStatus').value = 'جديد';
   document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
-  document.getElementById('fNotes').value = '';
   document.getElementById('modal').classList.add('open');
   setTimeout(() => document.getElementById('fName').focus(), 100);
 }
@@ -388,6 +455,7 @@ function openEdit(id) {
   document.getElementById('modalTitle').textContent = 'تعديل الطلب — ' + id;
   document.getElementById('fName').value = o.name;
   document.getElementById('fPhone').value = o.phone;
+  document.getElementById('fAddress').value = o.address || '';
   document.getElementById('fPlatform').value = o.platform;
   document.getElementById('fSource').value = o.source || '';
   document.getElementById('fQty').value = o.qty;
@@ -405,9 +473,10 @@ function saveOrder() {
   const phone = document.getElementById('fPhone').value.trim();
   if (!name || !phone) { showToast('⚠️ الاسم ورقم الهاتف مطلوبان'); return; }
   const o = {
-    id: editId || 'ORD-' + String(orderCounter++).padStart(3, '0'),
+    id: editId || 'ORD-' + String(orderCounter++).padStart(3,'0'),
     date: document.getElementById('fDate').value || new Date().toISOString().split('T')[0],
     name, phone,
+    address: document.getElementById('fAddress').value,
     platform: document.getElementById('fPlatform').value,
     source: document.getElementById('fSource').value,
     qty: parseInt(document.getElementById('fQty').value) || 1,
@@ -428,23 +497,17 @@ function deleteOrder(id) {
   showToast('تم حذف الطلب');
 }
 
-// ---- VIEW MODE ----
+// ---- VIEW MODE (شركة الشحن — بدون لوجن) ----
 function openViewMode() {
   document.getElementById('adminPage').style.display = 'none';
   document.getElementById('viewPage').style.display = 'block';
   renderView();
-  // في الموقع الحقيقي: window.location.href = '?view=1'
-}
-
-function goBack() {
-  document.getElementById('viewPage').style.display = 'none';
-  document.getElementById('adminPage').style.display = 'block';
 }
 
 // ---- EXPORT CSV ----
 function exportCSV() {
-  const headers = ['رقم الطلب','التاريخ','الاسم','رقم الهاتف','المنصة','مصدر الطلب','عدد القطع','إجمالي الطلب','الحالة','ملاحظات'];
-  const rows = orders.map(o => [o.id,o.date,o.name,o.phone,o.platform,o.source||'',o.qty,o.total,o.status,o.notes||''].map(v=>`"${v}"`).join(','));
+  const headers = ['رقم الطلب','التاريخ','الاسم','رقم الهاتف','العنوان','المنصة','مصدر الطلب','عدد القطع','إجمالي الطلب','الحالة','ملاحظات'];
+  const rows = orders.map(o => [o.id,o.date,o.name,o.phone,o.address||'',o.platform,o.source||'',o.qty,o.total,o.status,o.notes||''].map(v=>`"${v}"`).join(','));
   const csv = '\uFEFF' + [headers.join(','), ...rows].join('\n');
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
@@ -462,19 +525,25 @@ function copyViewLink() {
 // ---- TOAST ----
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ---- CLOSE MODAL ON OVERLAY CLICK ----
+// ---- MODAL CLOSE ON BG CLICK ----
 document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 
-// ---- CHECK URL FOR VIEW MODE ----
-if (new URLSearchParams(window.location.search).get('view') === '1') openViewMode();
-
 // ---- INIT ----
-render();
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('view') === '1') {
+  // لينك الشحن — عرض مباشر بدون لوجن
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('viewPage').style.display = 'block';
+  renderView();
+} else if (isLoggedIn) {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('adminPage').style.display = 'block';
+  render();
+}
 </script>
 </body>
 </html>
