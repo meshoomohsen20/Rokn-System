@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نظام تتبع الطلبات</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#f8f7f4;--surface:#fff;--surface2:#f1f0ec;
+    --border:#e2e0da;--border2:#ccc9c0;
+    --text:#1a1917;--text2:#6b6860;--text3:#9d9b96;
+    --blue-bg:#e6f1fb;--blue:#185fa5;
+    --green-bg:#eaf3de;--green:#3b6d11;
+    --red-bg:#fcebeb;--red:#a32d2d;
+    --teal-bg:#e1f5ee;--teal:#0f6e56;
+    --amber-bg:#faeeda;--amber:#854f0b;
+    --purple-bg:#eeedfe;--purple:#534ab7;
+    --coral-bg:#faece7;--coral:#993c1d;
+    --radius:8px;--radius-lg:12px;
+    --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+  }
+  body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
+  .container{max-width:1200px;margin:0 auto;padding:1.5rem}
+
+  /* HEADER */
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:12px}
+  .header-left h1{font-size:20px;font-weight:700;color:var(--text)}
+  .header-left p{font-size:12px;color:var(--text2);margin-top:2px}
+  .header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+  .view-link-box{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:6px 12px;font-size:12px;color:var(--text2)}
+  .view-link-box .link-text{color:var(--blue);font-weight:600;cursor:pointer;text-decoration:underline}
+  .view-link-box .link-text:hover{opacity:.8}
+
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:0 16px;height:36px;border-radius:var(--radius);font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-weight:500;transition:all .15s}
+  .btn:hover{background:var(--surface2)}
+  .btn-primary{background:var(--text);color:#fff;border-color:var(--text)}
+  .btn-primary:hover{opacity:.87;background:var(--text)}
+  .btn svg{width:15px;height:15px;flex-shrink:0}
+
+  /* STATS */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;box-shadow:var(--shadow)}
+  .stat .lbl{font-size:11px;color:var(--text2);margin-bottom:6px;font-weight:500}
+  .stat .val{font-size:28px;font-weight:700;color:var(--text);line-height:1}
+  .stat .sub{font-size:11px;color:var(--text3);margin-top:4px}
+
+  /* TOOLBAR */
+  .toolbar{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+  .toolbar input[type=text]{flex:1;min-width:200px;padding:0 12px;height:36px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:'Cairo',sans-serif;background:var(--surface);color:var(--text);outline:none;transition:border .15s}
+  .toolbar input[type=text]:focus{border-color:var(--blue)}
+  .toolbar select{height:36px;padding:0 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:'Cairo',sans-serif;background:var(--surface);color:var(--text);outline:none;cursor:pointer}
+
+  /* TABLE */
+  .tbl-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead{background:var(--surface2)}
+  th{padding:10px 14px;text-align:right;font-weight:600;font-size:11px;color:var(--text2);border-bottom:1px solid var(--border);white-space:nowrap;letter-spacing:.3px}
+  td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+  tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:#fafaf8}
+
+  .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap}
+  .b-new{background:var(--blue-bg);color:var(--blue)}
+  .b-confirmed{background:var(--green-bg);color:var(--green)}
+  .b-cancelled{background:var(--red-bg);color:var(--red)}
+  .b-delivered{background:var(--teal-bg);color:var(--teal)}
+  .b-pending{background:var(--amber-bg);color:var(--amber)}
+
+  .platform{font-size:11px;font-weight:600;display:inline-block;padding:2px 8px;border-radius:var(--radius)}
+  .pm{background:var(--purple-bg);color:var(--purple)}
+  .pt{background:var(--coral-bg);color:var(--coral)}
+  .po{background:var(--surface2);color:var(--text2)}
+
+  .actions{display:flex;gap:5px}
+  .ibtn{background:none;border:1px solid var(--border);border-radius:var(--radius);width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);transition:all .15s}
+  .ibtn:hover{background:var(--surface2);color:var(--text)}
+  .ibtn.del:hover{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+  .ibtn svg{width:14px;height:14px}
+
+  .empty{text-align:center;padding:3rem;color:var(--text3)}
+  .id-cell{font-size:11px;color:var(--text3);font-weight:600}
+  .date-cell{font-size:12px;color:var(--text2)}
+  .notes-cell{font-size:12px;color:var(--text2);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  /* MODAL */
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;align-items:center;justify-content:center;padding:1rem}
+  .overlay.open{display:flex}
+  .modal{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);padding:1.75rem;width:520px;max-width:100%;box-shadow:0 20px 60px rgba(0,0,0,.15);max-height:90vh;overflow-y:auto}
+  .modal h2{font-size:17px;font-weight:700;margin-bottom:1.5rem}
+  .fg{margin-bottom:14px}
+  .fg label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500}
+  .fg input,.fg select,.fg textarea{width:100%;padding:0 12px;height:38px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:'Cairo',sans-serif;background:var(--surface);color:var(--text);outline:none;transition:border .15s}
+  .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue)}
+  .fg textarea{height:72px;padding:10px 12px;resize:vertical}
+  .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .mfooter{display:flex;gap:8px;justify-content:flex-end;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)}
+
+  /* VIEW PAGE */
+  .view-page{display:none;min-height:100vh;background:var(--bg)}
+  .view-header{background:var(--surface);border-bottom:1px solid var(--border);padding:1.25rem 0;margin-bottom:1.5rem}
+  .view-header-inner{max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .view-title h1{font-size:18px;font-weight:700}
+  .view-title p{font-size:12px;color:var(--text2);margin-top:2px}
+  .readonly-badge{display:inline-flex;align-items:center;gap:5px;background:var(--red-bg);color:var(--red);font-size:11px;padding:4px 12px;border-radius:999px;font-weight:600}
+  .readonly-badge svg{width:12px;height:12px}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:13px;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;font-family:'Cairo',sans-serif}
+  .toast.show{opacity:1}
+
+  @media(max-width:700px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .fg-row{grid-template-columns:1fr}
+    th:nth-child(4),td:nth-child(4),th:nth-child(6),td:nth-child(6),th:nth-child(9),td:nth-child(9){display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ADMIN PAGE -->
+<div id="adminPage">
+  <div class="container">
+    <div class="header">
+      <div class="header-left">
+        <h1>📦 إدارة الطلبات</h1>
+        <p>لوحة التحكم الرئيسية</p>
+      </div>
+      <div class="header-actions">
+        <div class="view-link-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          لينك الشحن:
+          <span class="link-text" onclick="openViewMode()">افتح شاشة العرض</span>
+          <button class="btn" onclick="copyViewLink()" style="padding:0 10px;height:28px;font-size:11px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            نسخ اللينك
+          </button>
+        </div>
+        <button class="btn btn-primary" onclick="openAdd()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          طلب جديد
+        </button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="lbl">إجمالي الطلبات</div><div class="val" id="stTotal">0</div><div class="sub">كل الحالات</div></div>
+      <div class="stat"><div class="lbl">نشط / قيد التنفيذ</div><div class="val" id="stActive">0</div><div class="sub">جديد + مؤكد + انتظار</div></div>
+      <div class="stat"><div class="lbl">تم التوصيل</div><div class="val" id="stDone">0</div><div class="sub">مكتمل</div></div>
+      <div class="stat"><div class="lbl">ملغي</div><div class="val" id="stCancelled">0</div><div class="sub">محتاج مراجعة</div></div>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" id="search" placeholder="ابحث باسم أو رقم طلب أو هاتف..." oninput="render()">
+      <select id="filterStatus" onchange="render()">
+        <option value="">كل الحالات</option>
+        <option value="جديد">جديد</option>
+        <option value="مؤكد">مؤكد</option>
+        <option value="في الانتظار">في الانتظار</option>
+        <option value="تم التوصيل">تم التوصيل</option>
+        <option value="ملغي">ملغي</option>
+      </select>
+      <select id="filterPlatform" onchange="render()">
+        <option value="">كل المنصات</option>
+        <option value="Meta">Meta</option>
+        <option value="TikTok">TikTok</option>
+        <option value="أخرى">أخرى</option>
+      </select>
+      <button class="btn" onclick="exportCSV()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        تصدير CSV
+      </button>
+    </div>
+
+    <div class="tbl-card">
+      <table>
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>التاريخ</th>
+            <th>الاسم</th>
+            <th>رقم الهاتف</th>
+            <th>المنصة</th>
+            <th>عدد القطع</th>
+            <th>إجمالي الطلب</th>
+            <th>الحالة</th>
+            <th>ملاحظات</th>
+            <th>إجراء</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW ONLY PAGE -->
+<div class="view-page" id="viewPage">
+  <div class="view-header">
+    <div class="view-header-inner">
+      <div class="view-title">
+        <h1>📦 قائمة الطلبات</h1>
+        <p id="viewDate"></p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="readonly-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          عرض فقط — لا يمكن التعديل
+        </span>
+        <button class="btn" onclick="goBack()" style="font-size:12px">← للإدارة</button>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding-top:0">
+    <div class="tbl-card">
+      <table>
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>التاريخ</th>
+            <th>الاسم</th>
+            <th>رقم الهاتف</th>
+            <th>المنصة</th>
+            <th>عدد القطع</th>
+            <th>إجمالي الطلب</th>
+            <th>الحالة</th>
+            <th>ملاحظات</th>
+          </tr>
+        </thead>
+        <tbody id="viewTbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="modal">
+  <div class="modal">
+    <h2 id="modalTitle">إضافة طلب جديد</h2>
+    <div class="fg-row">
+      <div class="fg"><label>الاسم *</label><input type="text" id="fName" placeholder="اسم العميل"></div>
+      <div class="fg"><label>رقم الهاتف *</label><input type="text" id="fPhone" placeholder="01xxxxxxxxx"></div>
+    </div>
+    <div class="fg-row">
+      <div class="fg"><label>المنصة الإعلانية</label>
+        <select id="fPlatform"><option>Meta</option><option>TikTok</option><option>أخرى</option></select>
+      </div>
+      <div class="fg"><label>مصدر الطلب</label><input type="text" id="fSource" placeholder="مثال: إعلان فيديو"></div>
+    </div>
+    <div class="fg-row">
+      <div class="fg"><label>عدد القطع</label><input type="number" id="fQty" placeholder="1" min="1"></div>
+      <div class="fg"><label>إجمالي الطلب</label><input type="number" id="fTotal" placeholder="0"></div>
+    </div>
+    <div class="fg-row">
+      <div class="fg"><label>الحالة</label>
+        <select id="fStatus">
+          <option>جديد</option><option>مؤكد</option><option>في الانتظار</option><option>تم التوصيل</option><option>ملغي</option>
+        </select>
+      </div>
+      <div class="fg"><label>التاريخ</label><input type="date" id="fDate"></div>
+    </div>
+    <div class="fg"><label>ملاحظات</label><textarea id="fNotes" placeholder="أي ملاحظات إضافية..."></textarea></div>
+    <div class="mfooter">
+      <button class="btn" onclick="closeModal()">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveOrder()">حفظ الطلب</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ---- DATA ----
+let orders = JSON.parse(localStorage.getItem('orders_v2') || 'null');
+if (!orders) {
+  const today = new Date().toISOString().split('T')[0];
+  orders = [
+    {id:'ORD-001',date:today,name:'محمد علي',phone:'01012345678',platform:'Meta',source:'إعلان فيديو',qty:2,total:350,status:'جديد',notes:''},
+    {id:'ORD-002',date:today,name:'سارة أحمد',phone:'01098765432',platform:'TikTok',source:'إعلان صورة',qty:1,total:180,status:'مؤكد',notes:'تسليم سريع'},
+    {id:'ORD-003',date:today,name:'خالد محمود',phone:'01123456789',platform:'Meta',source:'ريتارجيت',qty:3,total:520,status:'تم التوصيل',notes:''},
+  ];
+  save();
+}
+
+let editId = null;
+let orderCounter = orders.length + 1;
+
+function save() { localStorage.setItem('orders_v2', JSON.stringify(orders)); }
+
+// ---- HELPERS ----
+function getBadge(s) {
+  return {جديد:'b-new',مؤكد:'b-confirmed','في الانتظار':'b-pending','تم التوصيل':'b-delivered',ملغي:'b-cancelled'}[s] || 'b-new';
+}
+function getPlatClass(p) { return p==='Meta'?'pm':p==='TikTok'?'pt':'po'; }
+
+// ---- STATS ----
+function updateStats() {
+  document.getElementById('stTotal').textContent = orders.length;
+  document.getElementById('stActive').textContent = orders.filter(o=>['جديد','مؤكد','في الانتظار'].includes(o.status)).length;
+  document.getElementById('stDone').textContent = orders.filter(o=>o.status==='تم التوصيل').length;
+  document.getElementById('stCancelled').textContent = orders.filter(o=>o.status==='ملغي').length;
+}
+
+// ---- RENDER ADMIN TABLE ----
+function render() {
+  updateStats();
+  const q = document.getElementById('search').value.toLowerCase();
+  const fs = document.getElementById('filterStatus').value;
+  const fp = document.getElementById('filterPlatform').value;
+  const filtered = orders.filter(o => {
+    return (!q || o.name.toLowerCase().includes(q) || o.id.toLowerCase().includes(q) || o.phone.includes(q))
+      && (!fs || o.status === fs)
+      && (!fp || o.platform === fp);
+  });
+  const tbody = document.getElementById('tbody');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="10" class="empty">لا توجد طلبات مطابقة</td></tr>';
+    return;
+  }
+  tbody.innerHTML = filtered.map(o => `
+    <tr>
+      <td class="id-cell">${o.id}</td>
+      <td class="date-cell">${o.date}</td>
+      <td style="font-weight:600">${o.name}</td>
+      <td style="direction:ltr;text-align:right;font-size:12px;color:#6b6860">${o.phone}</td>
+      <td><span class="platform ${getPlatClass(o.platform)}">${o.platform}</span></td>
+      <td style="text-align:center;font-weight:600">${o.qty}</td>
+      <td style="font-weight:600">${Number(o.total).toLocaleString('ar-EG')} ج.م</td>
+      <td><span class="badge ${getBadge(o.status)}">${o.status}</span></td>
+      <td class="notes-cell" title="${o.notes||''}">${o.notes||'—'}</td>
+      <td>
+        <div class="actions">
+          <button class="ibtn" onclick="openEdit('${o.id}')" title="تعديل">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="ibtn del" onclick="deleteOrder('${o.id}')" title="حذف">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ---- RENDER VIEW TABLE ----
+function renderView() {
+  document.getElementById('viewDate').textContent = 'آخر تحديث: ' + new Date().toLocaleString('ar-EG');
+  const tbody = document.getElementById('viewTbody');
+  if (!orders.length) { tbody.innerHTML = '<tr><td colspan="9" class="empty">لا توجد طلبات</td></tr>'; return; }
+  tbody.innerHTML = orders.map(o => `
+    <tr>
+      <td class="id-cell">${o.id}</td>
+      <td class="date-cell">${o.date}</td>
+      <td style="font-weight:600">${o.name}</td>
+      <td style="direction:ltr;text-align:right;font-size:12px;color:#6b6860">${o.phone}</td>
+      <td><span class="platform ${getPlatClass(o.platform)}">${o.platform}</span></td>
+      <td style="text-align:center;font-weight:600">${o.qty}</td>
+      <td style="font-weight:600">${Number(o.total).toLocaleString('ar-EG')} ج.م</td>
+      <td><span class="badge ${getBadge(o.status)}">${o.status}</span></td>
+      <td class="notes-cell">${o.notes||'—'}</td>
+    </tr>
+  `).join('');
+}
+
+// ---- ADD / EDIT ----
+function openAdd() {
+  editId = null;
+  document.getElementById('modalTitle').textContent = 'إضافة طلب جديد';
+  document.getElementById('fName').value = '';
+  document.getElementById('fPhone').value = '';
+  document.getElementById('fPlatform').value = 'Meta';
+  document.getElementById('fSource').value = '';
+  document.getElementById('fQty').value = '1';
+  document.getElementById('fTotal').value = '';
+  document.getElementById('fStatus').value = 'جديد';
+  document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('fNotes').value = '';
+  document.getElementById('modal').classList.add('open');
+  setTimeout(() => document.getElementById('fName').focus(), 100);
+}
+
+function openEdit(id) {
+  const o = orders.find(x => x.id === id);
+  if (!o) return;
+  editId = id;
+  document.getElementById('modalTitle').textContent = 'تعديل الطلب — ' + id;
+  document.getElementById('fName').value = o.name;
+  document.getElementById('fPhone').value = o.phone;
+  document.getElementById('fPlatform').value = o.platform;
+  document.getElementById('fSource').value = o.source || '';
+  document.getElementById('fQty').value = o.qty;
+  document.getElementById('fTotal').value = o.total;
+  document.getElementById('fStatus').value = o.status;
+  document.getElementById('fDate').value = o.date;
+  document.getElementById('fNotes').value = o.notes || '';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function saveOrder() {
+  const name = document.getElementById('fName').value.trim();
+  const phone = document.getElementById('fPhone').value.trim();
+  if (!name || !phone) { showToast('⚠️ الاسم ورقم الهاتف مطلوبان'); return; }
+  const o = {
+    id: editId || 'ORD-' + String(orderCounter++).padStart(3, '0'),
+    date: document.getElementById('fDate').value || new Date().toISOString().split('T')[0],
+    name, phone,
+    platform: document.getElementById('fPlatform').value,
+    source: document.getElementById('fSource').value,
+    qty: parseInt(document.getElementById('fQty').value) || 1,
+    total: parseFloat(document.getElementById('fTotal').value) || 0,
+    status: document.getElementById('fStatus').value,
+    notes: document.getElementById('fNotes').value
+  };
+  if (editId) { const i = orders.findIndex(x => x.id === editId); orders[i] = o; }
+  else orders.unshift(o);
+  save(); render(); closeModal();
+  showToast(editId ? '✓ تم تعديل الطلب' : '✓ تمت إضافة الطلب بنجاح');
+}
+
+function deleteOrder(id) {
+  if (!confirm('مؤكد حذف الطلب ' + id + '؟')) return;
+  orders = orders.filter(o => o.id !== id);
+  save(); render();
+  showToast('تم حذف الطلب');
+}
+
+// ---- VIEW MODE ----
+function openViewMode() {
+  document.getElementById('adminPage').style.display = 'none';
+  document.getElementById('viewPage').style.display = 'block';
+  renderView();
+  // في الموقع الحقيقي: window.location.href = '?view=1'
+}
+
+function goBack() {
+  document.getElementById('viewPage').style.display = 'none';
+  document.getElementById('adminPage').style.display = 'block';
+}
+
+// ---- EXPORT CSV ----
+function exportCSV() {
+  const headers = ['رقم الطلب','التاريخ','الاسم','رقم الهاتف','المنصة','مصدر الطلب','عدد القطع','إجمالي الطلب','الحالة','ملاحظات'];
+  const rows = orders.map(o => [o.id,o.date,o.name,o.phone,o.platform,o.source||'',o.qty,o.total,o.status,o.notes||''].map(v=>`"${v}"`).join(','));
+  const csv = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'orders-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  showToast('✓ تم تصدير الملف');
+}
+
+// ---- COPY LINK ----
+function copyViewLink() {
+  const url = window.location.href.split('?')[0] + '?view=1';
+  navigator.clipboard.writeText(url).then(() => showToast('✓ تم نسخ لينك العرض')).catch(() => showToast('اللينك: ' + url));
+}
+
+// ---- TOAST ----
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ---- CLOSE MODAL ON OVERLAY CLICK ----
+document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+// ---- CHECK URL FOR VIEW MODE ----
+if (new URLSearchParams(window.location.search).get('view') === '1') openViewMode();
+
+// ---- INIT ----
+render();
+</script>
+</body>
+</html>
