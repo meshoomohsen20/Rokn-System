@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rokn Elgelod</title>
+<title>نظام تتبع الطلبات</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap');
   *{box-sizing:border-box;margin:0;padding:0}
@@ -62,6 +62,8 @@
   .toolbar select{height:36px;padding:0 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:'Cairo',sans-serif;background:var(--surface);color:var(--text);outline:none;cursor:pointer}
 
   .tbl-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow)}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tbl-scroll table{min-width:900px}
   table{width:100%;border-collapse:collapse;font-size:13px}
   thead{background:var(--surface2)}
   th{padding:10px 14px;text-align:right;font-weight:600;font-size:11px;color:var(--text2);border-bottom:1px solid var(--border);white-space:nowrap}
@@ -127,7 +129,7 @@
 <div id="loginPage">
   <div class="login-wrap">
     <div class="login-card">
-      <h1>📦 Rokn System</h1>
+      <h1>📦 نظام الطلبات</h1>
       <p class="sub">سجل دخولك للمتابعة</p>
       <div class="login-err" id="loginErr">اسم المستخدم أو كلمة المرور غلط</div>
       <div class="fg"><label>اسم المستخدم</label><input type="text" id="lUser" placeholder="admin" autocomplete="username"></div>
@@ -188,7 +190,8 @@
 
     <div class="tbl-card">
       <div id="loadingAdmin" class="loading"><div class="spinner"></div>جاري تحميل الطلبات...</div>
-      <table id="adminTable" style="display:none">
+      <div class="tbl-scroll">
+      <table id="adminTable" style="display:none;min-width:900px">
         <thead>
           <tr>
             <th>رقم الطلب</th><th>التاريخ</th><th>الاسم</th><th>رقم الهاتف</th>
@@ -197,6 +200,7 @@
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
+      </table></div>
       </table>
     </div>
   </div>
@@ -207,7 +211,7 @@
   <div class="view-header">
     <div class="view-header-inner">
       <div class="view-title">
-        <h1>📦Roknelglod</h1>
+        <h1>📦 قائمة الطلبات</h1>
         <p id="viewDate"></p>
       </div>
       <span class="readonly-badge">🔒 عرض فقط — لا يمكن التعديل</span>
@@ -216,7 +220,8 @@
   <div class="container" style="padding-top:0">
     <div class="tbl-card">
       <div id="loadingView" class="loading"><div class="spinner"></div>جاري تحميل الطلبات...</div>
-      <table id="viewTable" style="display:none">
+      <div class="tbl-scroll">
+      <table id="viewTable" style="display:none;min-width:900px">
         <thead>
           <tr>
             <th>رقم الطلب</th><th>التاريخ</th><th>الاسم</th><th>رقم الهاتف</th>
@@ -225,6 +230,7 @@
           </tr>
         </thead>
         <tbody id="viewTbody"></tbody>
+      </table></div>
       </table>
     </div>
   </div>
